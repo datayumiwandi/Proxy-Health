@@ -1,5 +1,5 @@
 // File: api/check.js
-// VERSI BARU DENGAN OUTPUT JSON LANGSUNG (FLAT)
+// VERSI FINAL DENGAN PESAN BANTUAN DI ROOT
 
 import { connect as netConnect } from 'net';
 import { connect as tlsConnect } from 'tls';
@@ -37,6 +37,17 @@ function fetchTargetAPI(options) {
 }
 
 export default async function handler(req, res) {
+    // --- PERUBAHAN DI SINI: Tambahkan pesan bantuan untuk root path ---
+    // Cek jika tidak ada query parameter sama sekali
+    if (Object.keys(req.query).length === 0) {
+        return res.status(200).json({
+            message: "Selamat datang di API Pengecek Kesehatan Proksi.",
+            usage: "Gunakan parameter 'ip' untuk mengecek proksi.",
+            example: "/api/v1?ip=8.8.8.8:53",
+            author: "Mayumi"
+        });
+    }
+
     const { ip: proxyAddress } = req.query;
     if (!proxyAddress) {
         return res.status(400).json({ error: "Parameter 'ip' harus diberikan. Contoh: /api/v1?ip=1.2.3.4:8080" });
@@ -61,7 +72,6 @@ export default async function handler(req, res) {
         const pxy = await fetchTargetAPI({ host: IP_RESOLVER, path: PATH_RESOLVER, proxy: { ip, port } });
         const delay = Date.now() - startTime;
         
-        // --- PERUBAHAN DI SINI: Membuat objek JSON datar (flat) ---
         const responseData = {
             status: "success",
             proxy_ip: ip,
@@ -77,7 +87,6 @@ export default async function handler(req, res) {
             http_protocol: pxy.httpProtocol || 'Unknown',
         };
 
-        // Tambahkan data tambahan langsung ke objek utama jika tersedia
         if (pxy.city) responseData.city = pxy.city;
         if (pxy.continent) responseData.continent = pxy.continent;
         if (pxy.region) responseData.region = pxy.region;
