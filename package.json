@@ -1,5 +1,5 @@
 {
-    "name": "proxy-heallth",
+    "name": "proxy-health",
     "version": "1.0.0",
     "description": "Konfigurasi untuk menjalankan server Vercel secara lokal.",
     "type": "module",
