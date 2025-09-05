@@ -26,3 +26,6 @@ export default {
   }
 }
 ```
+
+____
+lalu pada bagian IP_RESOLVER di dalam index.js ganti dengan domain wolkers milik mu.
